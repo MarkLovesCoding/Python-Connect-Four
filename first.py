@@ -31,28 +31,57 @@ plays = {"Player 1":[],"Player 2":[]}
 #     # return print("Error")
     #  
 
-def input_column(player, plays):
+def drop_piece(board,col,player):
+    if is_space_available(board,col):
+        for r in range(len(board)-1,-1,-1):
+            if board[r][col] == 0:
+                board[r][col] = player
+                break
+    else:
+        print("Column full. Please try another column.")
+
+def input_column(board, player):
     player_input = 0
     while player_input >= 8 or player_input <= 0:
-        try:
-            if player_input <= 0 or player_input >=8:
-                print("Please input integer between 1-7, inclusive")
-            else:    
-                player_input = int(input(player+" Choose a column (1-7):"))
-                plays[player].append(player_input)
+        try:    
+            player_input = int(input("Player "+str(player)+" Choose a column (1-7):"))
+            # print(player_input)
+            if player_input > 0 and player_input < 8:
+                # print(player)
+                player_input -= 1
+                drop_piece(board,player_input,player)
+                print(board)
+                
+            else:
+              print("Please input integer between 1-7")
             
+
+        
         except:
             print("Please input integer between 1-7, inclusive")
 
+            
 def is_space_available(board,col):
     for r in board:
             if r[col] == 0:
                 return True
     return False
-board[2][6]=2.6
-board[5][1]=5.1
-board[0][2]=0.2
-print(board,is_space_available(board,2))
+
+
+
+    # print("Please choose another column")
+
+
+# drop_piece(board,1,1)
+# drop_piece(board,1,2)
+# drop_piece(board,1,3)
+# drop_piece(board,1,4)
+# drop_piece(board,1,5)
+# drop_piece(board,1,6)
+# drop_piece(board,1,7)
+# print(board)
+
+# print(board,is_space_available(board,2))
 
 # def next_space_available():
 #     pass
@@ -61,23 +90,20 @@ print(board,is_space_available(board,2))
 
 
 
-def play(GAME_OVER,player_turn,plays):
-    print(create_board())
+def play(GAME_OVER,player_turn,board):
+    # print(create_board())
     while not GAME_OVER:
         # Get input for player 1
+       
         if player_turn == 1:
-            input_column("Player 1",plays)
+            input_column(board,1)
             player_turn = 2
 
         if player_turn == 2:
-            input_column("Player 2", plays)
+            input_column(board,2)
             player_turn = 1
 
-        if len(plays["Player 2"]) > 5:
-            GAME_OVER = True
-            print(plays)
-            print("Game")
-
+        
 
 # print(print_board(board))
-# play(GAME_OVER,player_turn,plays)
+play(GAME_OVER,player_turn,board)
