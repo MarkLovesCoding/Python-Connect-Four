@@ -106,35 +106,7 @@ def input_column(board, player):
             except:
                 print("Please input integer between 1-7, inclusive")
 
-            
-# def is_space_available(board,col):
-#     for r in board:
-#             if r[col] == 0:
-#                 return True
-#     return False
-
-
-
-    # print("Please choose another column")
-
-
-# drop_piece(board,1,1)
-# drop_piece(board,1,2)
-# drop_piece(board,1,3)
-# drop_piece(board,1,4)
-# drop_piece(board,1,5)
-# drop_piece(board,1,6)
-# drop_piece(board,1,7)
-# print(board)
-
-# print(board,is_space_available(board,2))
-
-# def next_space_available():
-#     pass
-# def put_in_spot(col,board,player):
-#     for i in board:
-
-
+  
 
 def play(GAME_OVER,player_turn,board):
     print(board)
