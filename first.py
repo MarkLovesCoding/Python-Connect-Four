@@ -8,8 +8,8 @@ def create_board():
 
 
 board = create_board()
-def print_board(board):
-    print(numpy.flip(board,0))
+# def print_board(board):
+#     print(numpy.flip(board,0))
 
 
 
@@ -59,11 +59,12 @@ def check_win(board):
                 if board[r][c] == board[r+1][c+1] == board[r+2][c+2] == board[r+3][c+3]:
                     print(print("Player ", board[r][c]," wins!"))
                     return True
-    # negative diagonal 
+
+    # negative diagonal NEEDS FIXING
     for r in range(len(board)-3):
-        for c in range(len(board[r])-3):
+        for c in range(3, len(board[r])):
             if board[r][c] == 1 or board[r][c] == 2:
-                if board[r][c] == board[r-1][c-1] == board[r-2][c-2] == board[r-3][c-3]:
+                if board[r][c] == board[r+1][c-1] == board[r+2][c-2] == board[r+3][c-3]:
                     print(print("Player ", board[r][c]," wins!"))
                     return True
                     
