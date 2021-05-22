@@ -8,8 +8,8 @@ def create_board():
 
 
 board = create_board()
-# def print_board(board):
-#     print(numpy.flip(board,0))
+def print_board(board):
+    print(numpy.flip(board,0))
 
 
 
