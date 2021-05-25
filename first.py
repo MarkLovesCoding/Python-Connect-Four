@@ -13,29 +13,8 @@ def print_board(board):
 
 
 
-GAME_OVER = False
+game_over = False
 player_turn = 1
-# plays = {"Player 1":[],"Player 2":[]}
-
-# def verify_input(input):
-
-#     if type(input == int):
-#         try:
-#             if int(input) > 0 and int(input) <= 7:
-#                 return input
-#             else:
-#                 print("Number not in range. Try another in range.")
-#                 return 
-#         except:
-#             print("Errorrr")
-#     # return print("Error")
-    #  
-
-
-# 
-# WORK ON NEXT
-#when column full keep player turn. 
-# 
 
 def check_win(board):
 #     # check horizontal for 4 across
@@ -84,7 +63,7 @@ def drop_piece(board,col,player):
     else:
         print("Column full. Please try another column.")
         return False
-        
+
 def input_column(board, player):
     player_input = 0
     while player_input >= 8 or player_input <= 0:
@@ -109,15 +88,16 @@ def input_column(board, player):
 
   
 
-def play(GAME_OVER,player_turn,board):
+def play(game_over,player_turn,board):
     print(board)
-    while not GAME_OVER:
+    while not game_over:
         # Get input for player 1
        
         if player_turn == 1:
             if input_column(board,1) == True:
                 player_turn = 2
-                check_win(board)
+                if(check_win(board)):
+                    break
 
             else:
                 # input_column(board,1)
@@ -126,10 +106,11 @@ def play(GAME_OVER,player_turn,board):
         if player_turn == 2:
             if input_column(board,2) == True:
                 player_turn = 1
-                check_win(board)
+                if(check_win(board)):
+                    break
             else:
                 player_turn = 2
         
 
 # print(print_board(board))
-play(GAME_OVER,player_turn,board)
+play(game_over,player_turn,board)
