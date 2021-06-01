@@ -49,7 +49,7 @@ def intro():
         how_many_players = 1
         play(game_over,player_turn,board,how_many_players)
     # default to 2 player
-    if how_many != "2" or how_many != 2 or how_many != "1" or how_many != 1:
+    elif how_many != "2" or how_many != 2 or how_many != "1" or how_many != 1:
         # how_many_players = 2
         print("\n")
         print("You typed:",how_many, ". \nThat's not a 1 or a 2, silly.\n  Let's try that again.")
