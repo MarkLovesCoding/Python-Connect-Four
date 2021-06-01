@@ -34,32 +34,39 @@ def computer_player_move():
     return column
 
 # standard starting
-num_players = 2
-
+# how_many = 2
+how_many_players = 2
 # play game
 def intro():
     board = create_board()
     how_many = input(intro_banner)
     # 2 player game
-    if how_many == "2":
-        play_two_player(game_over,player_turn,board)
+    if how_many == "2" or how_many == 2:
+        how_many_players = 2
+        play(game_over,player_turn,board,how_many_players)
     # 1 player game
-    if how_many == "1":
-        num_players = 1
-        play_one_player(game_over,player_turn,board)
+    if how_many == "1" or how_many == 1:
+        how_many_players = 1
+        play(game_over,player_turn,board,how_many_players)
     # default to 2 player
+    if how_many != "2" or how_many != 2 or how_many != "1" or how_many != 1:
+        # how_many_players = 2
+        print("\n")
+        print("You typed:",how_many, ". \nThat's not a 1 or a 2, silly.\n  Let's try that again.")
+        intro()
+        # board = create_board()
+        # play(game_over,player_turn,board,how_many_players)
     else:
-        print("You typed:",how_many, ". \nThat's not a 1 or a 2, silly.\nLet's play a two player game.")
-        play_two_player(game_over,player_turn,board)
-
+        return False
 # ask to play again, then run intro()
 def play_again():
     play_again_input = input("Play again? (Y or N)")
-    board = create_board()
     if play_again_input == "Y" or play_again_input == "y":
+        board = create_board()
         return intro()
     else:
         print("Thanks for the game.")
+        # board = create_board()
         return False
 
 # check winning orientations
@@ -144,7 +151,47 @@ def input_column(board, player):
             except:
                 print("Please input integer between 1-7, inclusive")
 
-  
+# single or two player game logic
+#  ##### bug present: on 2 player game re-do, always restarts game
+def play(game_over,player_turn,board,how_many_players):
+    print_board(board)
+    while not game_over:
+        if player_turn == 1:
+            if input_column(board,1) == True:
+                player_turn = 2
+                if(check_win(board)):
+                    if play_again():
+                        play_again()
+                    else:
+                        break
+            else:
+                player_turn = 1
+
+        if player_turn == 2:
+            if how_many_players == 2:
+                if input_column(board,2) == True:
+                    player_turn = 1
+                    if(check_win(board)):
+                        if play_again():
+                            play_again()
+                        else:
+                            break
+                else:
+                    player_turn = 2
+            else:
+                col = computer_player_move()
+                if drop_piece_comp(board,col,player_turn):
+                    print_board(board)
+                    player_turn = 1
+                    if(check_win(board)):
+                        if play_again():
+                            play_again()
+                        else:
+                            break
+                    
+                else:
+                    player_turn = 2
+    
 # run two player game logic
 def play_two_player(game_over,player_turn,board):
     print_board(board)
@@ -167,7 +214,7 @@ def play_two_player(game_over,player_turn,board):
                     break
             else:
                 player_turn = 2
-
+        
 # run single player game logic
 def play_one_player(game_over,player_turn,board):
     print_board(board)
