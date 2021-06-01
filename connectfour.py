@@ -152,7 +152,6 @@ def input_column(board, player):
                 print("Please input integer between 1-7, inclusive")
 
 # single or two player game logic
-#  ##### bug present: on 2 player game re-do, always restarts game
 def play(game_over,player_turn,board,how_many_players):
     print_board(board)
     while not game_over:
@@ -243,10 +242,3 @@ def play_one_player(game_over,player_turn,board):
 
 # Play game
 intro()
-
-
-# IMPROVEMENTS TO BE MADE
-# 1. re-factor game logic based on number of players so it is DRY
-# 2. create option to start as player 1 or 2 in single player
-# 3. make AI at least competitive
-# 4. practice with classes. Save player profile to local memory as class object?
