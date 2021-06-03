@@ -86,8 +86,8 @@ def check_win(board):
                     print("Player ", str(board[r][c])[0]," wins!")
                     return True
     # positive diagonal
-    for r in range(len(board) - 3):
-        for c in range(len(board[r] - 3)):
+    for r in range(0,len(board) - 3):
+        for c in range(0,len(board[r]) - 3):
             if board[r][c] == 1 or board[r][c] == 2:
                 if board[r][c] == board[r+1][c+1] == board[r+2][c+2] == board[r+3][c+3]:
                     print("Player ", str(board[r][c])[0]," wins!")
