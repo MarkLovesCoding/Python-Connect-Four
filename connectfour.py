@@ -1,6 +1,6 @@
 import numpy
 import random
-
+import operator
 # INITIALIZE ROWS/COLUMNS VARS
 ROWS = 6
 COLUMNS = 7
@@ -9,6 +9,13 @@ def create_board():
     board = numpy.zeros((ROWS,COLUMNS))
     return board
 
+test_board = [
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,1,2],
+        [1,1,1,0,2,2,2],
+        [2,2,2,0,1,1,1],
+        [2,1,1,2,2,1,1]]
 # INITIALIZE OTHER VARS
 game_over = False
 player_turn = 1
@@ -32,6 +39,100 @@ def print_board(board):
 def computer_player_move():
     column = random.randint(0,6)
     return column
+
+##
+## AI Tester
+##
+def check_vertical_score(board,col,row):
+    score = 0
+    available_top = 5 - row
+    if row < 4:
+        one_below = board[row + 1][col]
+    if row < 3:
+        two_below = board[row + 2][col]
+    if row < 2:
+        three_below = board[row + 3[col]
+    print("one to three: {0}, {1}, {2}".format(one_below,two_below,three_below))
+    if three_below == 2 and two_below == 2 and one_below == 2:
+        if available_top >= 1:
+            score = 30 + available_top
+    elif two_below == 2 and one_below == 2:
+        if available_top >= 2:
+            score = 20 + available_top
+    elif one_below == 2:
+        if available_top >= 3:
+            score = 10 + available_top
+    elif one_below !=2:
+        if available_top >=4:
+            score = available_top
+    else:
+        score = available_top
+    return score
+
+
+
+def check_horizontal_score(board,col,row):
+    available_right = 3 if col <=3 else 6 - col
+    available_left = 3 if col >=3 else col
+    # available = [available_left,available_right]
+    # print("Available Left: {0} \nAvailable Right:{1}".format(available_left,available_right))
+    score = 0
+    temp_left = available_left
+    temp_right = available_right
+    # print(temp_right,temp_left)
+    if temp_left >= 0:
+        while temp_left > 0:
+            # print(board[row][col - temp_left])
+
+            if board[row][col - temp_left] == 0:
+                score += 1
+            if board[row][col - temp_left] == 2:
+                score += 10
+            temp_left -= 1
+    if temp_right >= 0:
+        while temp_right > 0:
+            # print(board[row][col - temp_right])
+
+            if board[row][col + temp_right] == 0:
+                score += 1
+            if board[row][col + temp_right] == 2:
+                score += 10
+            temp_right -= 1    
+    return score
+    
+                
+score = {}
+def ai_score(board, col,row):
+    # score = {}
+
+    score[col] = check_horizontal_score(board,col,row) + check_vertical_score(board,col,row)
+    print(score)
+        
+    return max(score.items(), key=operator.itemgetter(1))[0]
+    # ,check_vertical_score(col) ,check_pos_diagonal_score(col) ,check_neg_diagonal_score(col,row))
+    
+
+def computer_choose_column_smart(board):
+    # available_cols = []
+    best_col = None
+    for col in range(len(board[0])):
+        if is_valid_column(board,col):
+            for row in range(len(board)-1,-1,-1):
+                if board[row][col] == 0:
+                    # print(test_board)
+                    # print(col, row)
+                            
+                    # print(ai_score(board,col,row))
+                    if (best_col is None) or (ai_score(board,col,row) > best_col):
+                        best_col = ai_score(board,col,row)
+                    break
+                    # check_horizontal(boa
+
+    print("Best Col: {0}".format(best_col))
+    return best_col
+
+
+
 
 # standard starting
 # how_many = 2
@@ -122,12 +223,12 @@ def drop_piece(board,col,player):
 # drop computer piece until in valid column
 def drop_piece_comp(board,col,player):
     if is_valid_column(board,col):
-            for r in range(len(board)-1,-1,-1):
-                if board[r][col] == 0:
-                    board[r][col] = player
-                    return True
+        for r in range(len(board)-1,-1,-1):
+            if board[r][col] == 0:
+                board[r][col] = player
+                return True
     else:
-        col = computer_player_move()
+        col = computer_choose_column_smart(board)
         drop_piece_comp(board,col,player)
 
 # player inputs column
@@ -178,7 +279,7 @@ def play(game_over,player_turn,board,how_many_players):
                 else:
                     player_turn = 2
             else:
-                col = computer_player_move()
+                col = computer_choose_column_smart(board)
                 if drop_piece_comp(board,col,player_turn):
                     print_board(board)
                     player_turn = 1
@@ -206,6 +307,7 @@ def play_two_player(game_over,player_turn,board):
                 player_turn = 1
 
         if player_turn == 2:
+
             if input_column(board,2) == True:
                 player_turn = 1
                 if(check_win(board)):
@@ -230,7 +332,9 @@ def play_one_player(game_over,player_turn,board):
                 player_turn = 1
 
         if player_turn == 2:
-            col = computer_player_move()
+            # computer_choose_column_smart(board)
+
+            col = computer_choose_column_smart(board)
             if drop_piece_comp(board,col,player_turn):
                 print_board(board)
                 player_turn = 1
@@ -240,5 +344,7 @@ def play_one_player(game_over,player_turn,board):
             else:
                 player_turn = 2
 
+# def ai(player_count):
+# computer_choose_column_smart(test_board)
 # Play game
 intro()
