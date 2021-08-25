@@ -47,7 +47,25 @@ def computer_player_move():
 ## AI Tester
 ##
 # print(test_board[3,:])
-    
+def eval_window(window,player):
+    score = 0
+    opp_player = PLAYER_PIECE
+    if player == PLAYER_PIECE:
+        opp_player = COMP_PIECE
+
+    if window.count(player) == 4:
+        score += 100
+    if window.count(player) == 3 and window.count(EMPTY_PIECE) == 1:
+        score += 10
+    if window.count(player) == 2 and window.count(EMPTY_PIECE) == 2:
+        score += 5
+    # CHECK IF PLAYER 1 WINS, BLOCK
+    if window.count(opp_player) == 3 and (window.count(EMPTY_PIECE)):
+        score += 200    
+    if window.count(opp_player) == 3 and (window.count(player)):
+        score += 120
+    return score
+
 def score_at_position(board, player):
 
     opp_player = PLAYER_PIECE
@@ -61,27 +79,38 @@ def score_at_position(board, player):
         row_arr = [i for i in list(board[r,:])]
         for col in range(COLUMNS - 3):
             window = row_arr[col:col + 4]
-            if window.count(player) == 4:
-                score += 100
-            elif window.count(opp_player) == 3 and window.count(EMPTY_PIECE) == 1:
-                score += 50
-            elif window.count(player) == 3 and window.count(EMPTY_PIECE) == 1:
-                score += 10
+            # print("horizontal",col,window)
+            score += eval_window(window,player)
             # CHECK IF PLAYER 1 WINS, BLOCK
-            
+        # print("hor score: ", score)     
 
     # Check vertical score             
     for c in range(COLUMNS):
         col_arr = [i for i in list(board[:,c])]
         for r in range(ROWS - 3):
             window = col_arr[r:r + 4]
-            if window.count(player) == 4:
-                score += 100
-            elif window.count(player) == 3 and window.count(EMPTY_PIECE) == 1:
-                score += 10
-            # CHECK IF PLAYER 1 WINS, BLOCK
-            elif window.count(opp_player) == 3 and window.count(EMPTY_PIECE) == 1:
-                score += 80
+            # print("vert:",c,window)
+            score += eval_window(window,player)
+
+        # print("Vert score:", score)    
+    # Check diagonal up-left
+    for r in range(ROWS - 3):
+        # diag_pos_arr = [i for i in list(board[:,c])]
+        for c in range(COLUMNS - 3):
+            window = [board[r + i][c + i] for i in range(4)]
+            # print("diag:",c, window)
+            score += eval_window(window,player)
+
+        # print("diag up-left score:", score)
+    # Check diagonal up-right
+    for r in range(ROWS - 3):
+        # diag_pos_arr = [i for i in list(board[:,c])]
+        for c in range(3, COLUMNS):
+            window = [board[r + i][c - i] for i in range(4)]
+            # print("diag+:",c, window)
+            score += eval_window(window,player)
+
+        # print("diag up-right score:",score)
 
     print("Score",score)
     return score
@@ -99,12 +128,14 @@ def choose_best_move(board, player):
     best_score = 0
     valid_columns = get_valid_columns(board)
     best_col = random.choice(valid_columns)
-
+    # score = 0
     # print(valid_columns)    
     for col in valid_columns:
+        score = 0
         # row = get_open_row(board, col)
         temp_board = board.copy()
-        drop_piece(temp_board, col, player)
+        row = get_open_row(board, col)
+        drop_piece(temp_board, col, row, player)
         print("temp",temp_board)
         score = score_at_position(temp_board, player)
         print("score at", score,"col",col)
@@ -204,15 +235,10 @@ def get_open_row(board,col):
 
 
 # drop piece to bottom most available row in column
-def drop_piece(board,col,player):
-    if get_open_row(board,col) != None:
-        row = get_open_row(board,col)
+def drop_piece(board,col,row,player):
 
         board[row][col] = player
-        return True
-    else:
-        print("Column full. Please try another column.")
-        return False
+
 
 
                     
@@ -227,8 +253,15 @@ def input_column(board, player):
                 # Check input between/including 1-7
                 if player_input > 0 and player_input < 8:
                     player_input -= 1
-                    if(drop_piece(board,player_input,player)):
+                    row = get_open_row(board, player_input)
+                    print("row",row)
+                    print("player_input",player_input)
+                    if row != None:
+                        print("here")
+                        drop_piece(board,player_input,row,player)
+                        print("here2")
                         print_board(board)
+                        print("here3")
                         return True
                     else:
                         return False
@@ -266,7 +299,9 @@ def play(game_over,player_turn,board,how_many_players):
                     player_turn = 2
             else:
                 col = choose_best_move(board,player_turn)
-                if drop_piece(board,col,player_turn):
+                row = get_open_row(board,col)
+                if row != None:
+                    drop_piece(board,col,row, player_turn)
                     print_board(board)
                     player_turn = 1
                     if(check_win(board)):
