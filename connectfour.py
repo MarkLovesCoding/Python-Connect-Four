@@ -431,6 +431,7 @@ def play(game_over,player_turn,board,how_many_players):
                             label = myfont.render("Player 1 wins!!", 1, RED)
                             # print("You won!")
                             screen.blit(label,(40,10))
+                            game_over = True
                             # if play_again():
                             #     play_again()
                             # else:
