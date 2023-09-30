@@ -314,7 +314,7 @@ def is_valid_column(board,col):
 def get_open_row(board,col):
     if is_valid_column(board,col):
         for r in range(ROWS):
-            if board[r][col].any() == 0:
+            if board[r][col] == 0:
                 return r
     else:
         print("No open row")
@@ -413,7 +413,6 @@ def play(game_over,player_turn,board,how_many_players):
                     if game_over:
                         pygame.time.wait(3000)       
                         intro()
-                        pygame.display.update()
                 pygame.display.update()
 
 
