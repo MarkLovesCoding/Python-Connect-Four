@@ -2,6 +2,8 @@
 
 This is a simple implementation of the classic Connect Four game using Python and Pygame.
 
+![Connect Four Game](./assets/python.PNG)
+
 ## Installation
 
 To run this game, you need to have Python installed on your system. If you don't have it already, you can download and install it from the [official Python website](https://www.python.org/).
